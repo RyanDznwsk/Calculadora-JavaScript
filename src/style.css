@@ -4,3 +4,62 @@ html {
     line-height: 1.5;
     font-size: clamp(1rem, 0.533rem + 0.533vw, 1.25rem);
 }
+
+body {
+    text-align: center;
+    background-color: #ffa794;
+    color: #021d3f;
+    padding: 0 2rem;
+}
+
+section.calculadora {
+    background-color: #032857;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 0.625rem;
+    padding: 0.75rem;
+    border-radius: 1.5rem;
+    max-width: 32rem;
+    margin-block: 7.5rem;
+    margin-inline: auto;
+}
+section.calculadora div.visor {
+    text-align: right;
+    color: #e7dacc;
+    font-size: 2rem;
+    background-color: #204F78;
+    grid-column: 1 / span 4;
+    padding: 0.75rem 0.5rem;
+    border-radius: 1.5rem;
+}
+section.calculadora button {
+    color: #e7dacc;
+    font-size: 1.125rem;
+    background-color: #0e345e;
+    padding: 0.625rem 0.5rem;
+    border-top: 1px #faefe7 solid;
+    border-left: 1px #faefe7 solid;
+    border-right: 2px #000000 solid;
+    border-bottom: 2px #000000 solid;
+    border-radius: 1rem;
+}
+section.calculadora button:hover {
+    border-style: inset;
+}
+section.calculadora button.clear {
+    grid-column: 1 / span 2;
+}
+section.calculadora button.action {
+    background-color: #144477;
+}
+section.calculadora button.equal {
+    background-color: #e7462a;
+}
+section.calculadora button:active {
+    color: #021d3f;
+    background-color: #faefe7;
+    border-top: 1px #000000 outset;
+    border-left: 1px #000000 outset;
+    border-right: 2px #eecbb1 outset;
+    border-bottom: 2px #eecbb1 outset;
+}
