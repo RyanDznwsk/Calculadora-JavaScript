@@ -126,50 +126,64 @@ function infixToPostfix(tokens) {
     return saida;
 }
 
-function calcular_postfix(tokens_postfix) {
+function calcularPostfix(tokensPostfix) {
     let pilha = [];
+
+    const factorial = (n) => {
+        if (n < 0 || !Number.isInteger(n)) return "Erro";
+        if (n === 0 || n === 1) return 1;
+        let resultado = 1;
+        for (let i = 2; i <= n; i++) resultado *= i;
+        return resultado;
+    }
     
-    for (let token of tokens_postfix) {
+    for (let token of tokensPostfix) {
         if (!isNaN(token)) {
             pilha.push(parseFloat(token))
+        } else if (token === "π") {
+            pilha.push(Math.PI);
+        } else if (token === "e") {
+            pilha.push(Math.E);
+        } else if (["+", "-", "×", "÷", "^"].includes(token)) {
+            if (pilha.length < 2) return "Erro";
+            let num2 = pilha.pop();
+            let num1 = pilha.pop();
+            
+            if (token === "+") pilha.push(num1 + num2);
+            else if (token === "-") pilha.push(num1 - num2);
+            else if (token === "×") pilha.push(num1 * num2);
+            else if (token === "÷") {
+                if (num2 == 0) return "Erro";
+                pilha.push(num1 / num2);
+            } else if (token === "^") pilha.push(Math.pow(num1, num2));
+        } else if (["sin", "cos", "tan", "log", "ln", "√", "!", "%"].includes(token)) {
+            if (pilha.length < 1) return "Erro";
+            let num = pilha.pop()
+                
+            if (token === "√") {
+                if (num < 0) return "Erro";
+                pilha.push(Math.sqrt(num));
+            } else if (token === "sin") pilha.push(Math.sin(num * (Math.PI / 180)));
+            else if (token === "cos") pilha.push(Math.cos(num * (Math.PI / 180)));
+            else if (token === "tan") pilha.push(math.tan(num * (Math.PI / 180)));
+            else if (token === "log") {
+                if (num <= 0) return "Erro";
+                pilha.push(Math.log10(num));
+            } else if (token === "ln") {
+                if (num <= 0) { return "Erro" }
+                pilha.push(Math.log(num));
+            } else if (token === "!") {
+                let resFatorial = fatorial(num);
+                if (resFatorial === "Erro") return "Erro";
+                pilha.push(resFatorial);
+            } else if (token === "%") pilha.push(num / 100);
         }
-            elif token == "π":
-                pilha.append(math.pi)
-            elif token == "e":
-                pilha.append(math.e)
-            elif token in ["+", "-", "×", "÷", "^"]:
-                if len(pilha) < 2: return "Erro"
-                
-                num2 = pilha.pop()
-                num1 = pilha.pop()
-                
-                if token == "+": pilha.append(num1 + num2)
-                elif token == "-": pilha.append(num1 - num2)
-                elif token == "×": pilha.append(num1 * num2)
-                elif token == "÷":
-                    if num2 == 0: return "Erro"
-                    pilha.append(num1 / num2)
-                elif token == "^": pilha.append(num1 ** num2)
-            elif token in ["sin", "cos", "tan", "log", "ln", "√", "!", "%"]:
-                if len(pilha) < 1: return "Erro"
-                
-                num = pilha.pop()
-                
-                if token == "√":
-                    if num < 0: return "Erro"
-                    pilha.append(math.sqrt(num))
-                elif token == "sin": pilha.append(math.sin(math.radians(num)))
-                elif token == "cos": pilha.append(math.cos(math.radians(num)))
-                elif token == "tan": pilha.append(math.tan(math.radians(num)))
-                elif token == "log":
-                    if num <= 0: return "Erro"
-                    pilha.append(math.log10(num))
-                elif token == "ln":
-                    if num <= 0: return "Erro"
-                    pilha.append(math.log(num))
-                elif token == "!":
-                    if num < 0 or not num.is_integer(): return "Erro"
-                    pilha.append(math.factorial(int(num)))
-                elif token == "%": pilha.append(num / 100)
     }
+    if (pilha.length === 1) {
+        let resultado = pilha[0];
+        if (isNaN(resultado) || !isFinite(resultado)) return "Erro";
+        if (Number.isInteger(resultado)) return resultado;
+        return parseFloat(resultado.toFixed(6));
+    }
+    return "Erro";
 }
