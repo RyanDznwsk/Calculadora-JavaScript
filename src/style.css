@@ -20,17 +20,21 @@ section.calculadora {
     padding: 0.75rem;
     border-radius: 1.5rem;
     max-width: 32rem;
-    margin-block: 7.5rem;
+    margin-block: 2.625rem;
     margin-inline: auto;
 }
 section.calculadora div.visor {
-    text-align: right;
     color: #e7dacc;
     font-size: 2rem;
-    background-color: #204F78;
     grid-column: 1 / span 4;
     padding: 0.75rem 0.5rem;
+    background-color: #204F78;
     border-radius: 1.5rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    overflow-x: auto;
 }
 section.calculadora button {
     color: #e7dacc;
