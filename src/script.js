@@ -22,9 +22,23 @@ function cliqueBotao(valor) {
         expressao = expressao.slice(0, -1);
         visor.textContent = expressao;
     } else if (valor === "equal") {
-        let tokens = tokenizar(expressao);
-        let postfix = infixToPostfix(tokens);
-        alert("Postfix: " + postfix);
+        try {
+            let tokens = tokenizar(expressao);
+            let postfix = infixToPostfix(tokens);
+            let resultado = calcularPostfix(postfix);
+            visor.textContent = resultado;
+            if (resultado != "Erro") {
+                expressao = resultado.toString();
+                limparProxClique = true;
+            } else {
+                expressao = "";
+                limparProxClique = false;
+            }
+        } catch (erro) {
+            visor.textContent = "Erro";
+            expressao = "";
+            limparProxClique = false;
+        }
     } else {
         const operadoresContinuidade = ["+", "-", "×", "÷", "^", "%", "!"]
         if (limparProxClique && !operadoresContinuidade.includes(valor)) {
@@ -95,8 +109,8 @@ function infixToPostfix(tokens) {
         "×": 2, "÷": 2,
         "^": 3, "sin": 3, "cos": 3, "tan": 3, "log": 3, "ln": 3, "√": 3, "!": 3, "%": 3
     }
-    saida = [];
-    pilha = [];
+    let saida = [];
+    let pilha = [];
 
     for (let token of tokens) {
         if (!isNaN(token) || token === "π" || token === "e") {
@@ -114,7 +128,7 @@ function infixToPostfix(tokens) {
                 saida.push(pilha.pop());
             }
         } else if (token in precedencia) {
-            while (pilha.lenght > 0 && pilha[pilha.length - 1] !== "(" && precedencia[pilha[pilha.lenght - 1]] >= precedencia[token]) {
+            while (pilha.length > 0 && pilha[pilha.length - 1] !== "(" && precedencia[pilha[pilha.length - 1]] >= precedencia[token]) {
                 saida.push(pilha.pop());
             }
             pilha.push(token);
@@ -129,7 +143,7 @@ function infixToPostfix(tokens) {
 function calcularPostfix(tokensPostfix) {
     let pilha = [];
 
-    const factorial = (n) => {
+    const fatorial = (n) => {
         if (n < 0 || !Number.isInteger(n)) return "Erro";
         if (n === 0 || n === 1) return 1;
         let resultado = 1;
@@ -165,7 +179,7 @@ function calcularPostfix(tokensPostfix) {
                 pilha.push(Math.sqrt(num));
             } else if (token === "sin") pilha.push(Math.sin(num * (Math.PI / 180)));
             else if (token === "cos") pilha.push(Math.cos(num * (Math.PI / 180)));
-            else if (token === "tan") pilha.push(math.tan(num * (Math.PI / 180)));
+            else if (token === "tan") pilha.push(Math.tan(num * (Math.PI / 180)));
             else if (token === "log") {
                 if (num <= 0) return "Erro";
                 pilha.push(Math.log10(num));
@@ -187,3 +201,17 @@ function calcularPostfix(tokensPostfix) {
     }
     return "Erro";
 }
+
+window.addEventListener('keydown', (e) => {
+    let tecla = e.key;
+    let codigo = e.code;
+    if (codigo === "Backspace") cliqueBotao("backspace");
+    else if (codigo === "Enter" || codigo === "NumpadEnter") {
+        e.preventDefault();
+        cliqueBotao("equal");
+    } else if (codigo === "Escape") cliqueBotao("clear");
+    else if ("0123456789.+-^!%()".includes(tecla)) cliqueBotao(tecla);
+
+    if (tecla === "*") cliqueBotao("×");
+    else if (tecla === "/") cliqueBotao("÷");
+})
